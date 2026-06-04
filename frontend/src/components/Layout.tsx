@@ -1,7 +1,17 @@
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import styles from './Layout.module.css';
 
+const STAGES = [
+  { key: 'chapter_splitting', label: 'Upload' },
+  { key: 'character_extraction', label: 'Characters' },
+  { key: 'scene_analysis', label: 'Scenes' },
+  { key: 'episode_structuring', label: 'Episodes' },
+  { key: 'script_assembly', label: 'Script' },
+];
+
 export function Layout() {
+  const location = useLocation();
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>

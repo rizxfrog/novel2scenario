@@ -1,10 +1,50 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
-import { UploadPage } from './pages/UploadPage';
-import { CharacterEditor } from './pages/CharacterEditor';
-import { SceneEditor } from './pages/SceneEditor';
-import { EpisodePlanner } from './pages/EpisodePlanner';
-import { ScriptPreview } from './pages/ScriptPreview';
+
+function UploadPage() {
+  return (
+    <div>
+      <h2>Upload Novel</h2>
+      <p>Upload page coming soon...</p>
+    </div>
+  );
+}
+
+function CharacterEditor() {
+  return (
+    <div>
+      <h2>Character Editor</h2>
+      <p>Character editor coming soon...</p>
+    </div>
+  );
+}
+
+function SceneEditor() {
+  return (
+    <div>
+      <h2>Scene Editor</h2>
+      <p>Scene editor coming soon...</p>
+    </div>
+  );
+}
+
+function EpisodePlanner() {
+  return (
+    <div>
+      <h2>Episode Planner</h2>
+      <p>Episode planner coming soon...</p>
+    </div>
+  );
+}
+
+function ScriptPreview() {
+  return (
+    <div>
+      <h2>Script Preview</h2>
+      <p>Script preview coming soon...</p>
+    </div>
+  );
+}
 
 export function App() {
   return (
@@ -16,7 +56,7 @@ export function App() {
           <Route path="job/:jobId/scenes" element={<SceneEditor />} />
           <Route path="job/:jobId/episodes" element={<EpisodePlanner />} />
           <Route path="job/:jobId/script" element={<ScriptPreview />} />
-          <Route path="*" element={<div style={{ padding: 48, textAlign: 'center' }}>Page not found</div>} />
+          <Route path="*" element={<div>Page not found</div>} />
         </Route>
       </Routes>
     </BrowserRouter>
