@@ -1,0 +1,32 @@
+.page { max-width: 800px; margin: 0 auto; }
+.desc { color: #666; margin-bottom: 24px; }
+.form { display: flex; flex-direction: column; gap: 16px; }
+.input {
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+.textarea {
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 300px;
+}
+.button {
+  padding: 12px 24px;
+  background: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  align-self: flex-start;
+}
+.button:hover { background: #1557b0; }
+.button:disabled { background: #93b8f0; cursor: not-allowed; }
+.error { color: #e74c3c; background: #fde8e8; padding: 10px 14px; border-radius: 6px; }
