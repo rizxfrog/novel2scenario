@@ -94,6 +94,7 @@ CREATE TABLE IF NOT EXISTS adaptation_notes (
 
 def _create_connection(path):
     conn = sqlite3.connect(path, check_same_thread=False)
+    conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("PRAGMA foreign_keys=ON")
     return conn
