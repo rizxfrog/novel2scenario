@@ -43,14 +43,14 @@ async def _make_openai_call(
     prompt: str,
     model: str = OPENAI_MODEL,
     temperature: float = 0.3,
-    max_tokens: int = 4096,
+    max_completion_tokens: int = 4096,
 ) -> Any:
     client = _get_client()
     response = await client.chat.completions.create(
         model=model,
         messages=[{"role": "user", "content": prompt}],
         temperature=temperature,
-        max_tokens=max_tokens,
+        max_completion_tokens=max_completion_tokens,
         response_format={"type": "json_object"},
     )
     return response
