@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import re
 from typing import Any, Callable, Coroutine
 
 from openai import AsyncOpenAI
@@ -39,6 +40,75 @@ def _get_client() -> AsyncOpenAI:
     return _client
 
 
+def _parse_json_response(content: str) -> dict[str, Any]:
+    """Parse LLM JSON response with recovery for truncation and markdown fences."""
+    # Strip markdown code fences
+    md_match = re.search(r"```(?:json)?\s*\n?(.*?)\n?```", content, re.DOTALL)
+    if md_match:
+        content = md_match.group(1).strip()
+    else:
+        content = content.strip()
+
+    # Try direct parse
+    try:
+        return json.loads(content)
+    except json.JSONDecodeError:
+        pass
+
+    # Repair truncated JSON: walk characters tracking structural state,
+    # then close unclosed brackets and strings.
+    in_string = False
+    in_escape = False
+    last_boundary = 0
+    stack: list[str] = []
+
+    for i, ch in enumerate(content):
+        if in_escape:
+            in_escape = False
+            continue
+        if ch == "\\" and in_string:
+            in_escape = True
+            continue
+        if ch == '"' and not in_escape:
+            in_string = not in_string
+            last_boundary = i + 1
+            continue
+        if in_string:
+            continue
+        if ch in "{[":
+            stack.append(ch)
+        elif ch in "}]":
+            expected = "{" if ch == "}" else "["
+            if stack and stack[-1] == expected:
+                stack.pop()
+                if not stack:
+                    last_boundary = i + 1
+        elif ch == "," and not stack:
+            last_boundary = i + 1
+
+    # Build closing suffix
+    brace_map = {"{": "}", "[": "]"}
+    suffix = "".join(brace_map[b] for b in reversed(stack))
+
+    # If cut off mid-string, close it
+    if in_string:
+        repair = content[:last_boundary] + '"' + suffix
+    else:
+        repair = content[:last_boundary] + suffix
+
+    try:
+        return json.loads(repair)
+    except json.JSONDecodeError:
+        # Last resort: try progressively shorter prefixes
+        for i in range(len(repair) - 1, 0, -1):
+            try:
+                return json.loads(repair[:i] + suffix)
+            except json.JSONDecodeError:
+                continue
+
+    raise json.JSONDecodeError("Failed to repair truncated JSON", content, 0)
+
+
 async def _make_openai_call(
     prompt: str,
     model: str = OPENAI_MODEL,
@@ -61,6 +131,8 @@ async def run_agent(
     context: dict[str, Any] | None = None,
     model: str = OPENAI_MODEL,
     max_retries: int = 3,
+    max_completion_tokens: int = 4096,
+    max_completion_tokens_scale: int = 2,
 ) -> dict[str, Any]:
     """Run a single agent call to OpenAI and return parsed JSON result."""
     full_prompt = prompt
@@ -70,12 +142,29 @@ async def run_agent(
     last_error = None
     for attempt in range(max_retries):
         try:
-            response = await _make_openai_call(full_prompt, model=model)
+            response = await _make_openai_call(
+                full_prompt,
+                model=model,
+                max_completion_tokens=max_completion_tokens,
+            )
             content = response.choices[0].message.content
-            return json.loads(content)
+            return _parse_json_response(content)
+        except json.JSONDecodeError as e:
+            last_error = e
+            logger.warning(
+                f"Agent call attempt {attempt + 1}/{max_retries} failed (JSON error): {e}"
+            )
+            if attempt < max_retries - 1:
+                max_completion_tokens *= max_completion_tokens_scale
+                logger.info(
+                    f"Retrying with max_completion_tokens={max_completion_tokens}"
+                )
+                await asyncio.sleep(2 ** attempt)
         except Exception as e:
             last_error = e
-            logger.warning(f"Agent call attempt {attempt + 1}/{max_retries} failed: {e}")
+            logger.warning(
+                f"Agent call attempt {attempt + 1}/{max_retries} failed: {e}"
+            )
             if attempt < max_retries - 1:
                 await asyncio.sleep(2 ** attempt)
 

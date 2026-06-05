@@ -11,3 +11,6 @@ wheels/
 
 # Node
 node_modules/
+/novel2scenario.db
+/novel2scenario.db-shm
+/novel2scenario.db-wal

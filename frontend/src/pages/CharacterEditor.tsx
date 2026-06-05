@@ -21,9 +21,20 @@ export function CharacterEditor() {
 
   async function loadData() {
     try {
-      const [j, chars] = await Promise.all([api.getJob(id), api.getCharacters(id)]);
-      setJob(j);
-      setCharacters(chars);
+      const j = await api.getJob(id);
+      
+      // If character extraction hasn't run yet, trigger it
+      if (j.pipeline_stage === 'chapter_splitting' && j.status === 'awaiting_review') {
+        const updated = await api.continueJob(id);
+        // ContinueJob advances to characters stage; reload
+        const chars = await api.getCharacters(id);
+        setJob(updated);
+        setCharacters(chars);
+      } else {
+        const chars = await api.getCharacters(id);
+        setJob(j);
+        setCharacters(chars);
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {

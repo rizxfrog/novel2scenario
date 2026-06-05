@@ -61,5 +61,9 @@ async def split_chapters(novel_text: str) -> list[dict]:
         return chapters
 
     logger.info("No clear delimiter found, using LLM for chapter splitting")
-    result = await run_agent(CHAPTER_SPLIT_PROMPT, {"text": novel_text})
+    result = await run_agent(
+        CHAPTER_SPLIT_PROMPT,
+        {"text": novel_text},
+        max_completion_tokens=32768,
+    )
     return result.get("chapters", [])
