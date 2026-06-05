@@ -7,7 +7,7 @@ from typing import Any, Callable, Coroutine
 
 from openai import AsyncOpenAI
 
-from backend.config import OPENAI_API_KEY, OPENAI_BASE_URL, OPENAI_MODEL, AGENT_CONCURRENCY
+from backend.config import OPENAI_API_KEY, OPENAI_BASE_URL, OPENAI_MODEL, AGENT_CONCURRENCY, OPENAI_AUTH_HEADER, OPENAI_CUSTOM_HEADERS
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,25 @@ _client: AsyncOpenAI | None = None
 def _get_client() -> AsyncOpenAI:
     global _client
     if _client is None:
-        _client = AsyncOpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
+        kwargs: dict[str, Any] = {"base_url": OPENAI_BASE_URL}
+        headers: dict[str, str] = {}
+
+        if OPENAI_CUSTOM_HEADERS:
+            # 完全自定义 headers（JSON 格式，如 {"X-API-Key": "xxx"}）
+            import json as _json
+            headers.update(_json.loads(OPENAI_CUSTOM_HEADERS))
+
+        if OPENAI_AUTH_HEADER:
+            # 自定义 Authorization header value（覆盖可能存在的 Authorization）
+            headers["Authorization"] = OPENAI_AUTH_HEADER
+        elif "Authorization" not in headers:
+            # 默认使用标准 Bearer 认证
+            kwargs["api_key"] = OPENAI_API_KEY
+
+        if headers:
+            kwargs["default_headers"] = headers
+
+        _client = AsyncOpenAI(**kwargs)
     return _client
 
 

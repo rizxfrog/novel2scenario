@@ -27,8 +27,10 @@ npm install
 | 变量 | 必填 | 默认值 | 说明 |
 |------|------|--------|------|
 | `OPENAI_API_KEY` | 是 | - | API 密钥 |
-| `OPENAI_BASE_URL` | 是 | `https://api.openai.com/v1` | API 接口地址（支持任何 OpenAI 兼容接口） |
+| `OPENAI_BASE_URL` | 是 | `https://api.openai.com/v1` | API 接口地址 |
 | `OPENAI_MODEL` | 是 | `gpt-4o` | 模型名称 |
+| `OPENAI_AUTH_HEADER` | 否 | - | 自定义 Authorization header 值。某些国内接口不认默认的 `Bearer <key>` 格式，可设为不带前缀的 key 值 |
+| `OPENAI_CUSTOM_HEADERS` | 否 | - | 完全自定义 headers（JSON 格式），如 `{"X-API-Key":"your-key"}` |
 | `DATABASE_PATH` | 否 | `novel2scenario.db` | 数据库文件路径 |
 | `AGENT_CONCURRENCY` | 否 | `5` | 并行 Agent 数量 |
 
