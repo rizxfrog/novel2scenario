@@ -7,7 +7,7 @@ from typing import Any, Callable, Coroutine
 
 from openai import AsyncOpenAI
 
-from backend.config import OPENAI_API_KEY, OPENAI_MODEL, AGENT_CONCURRENCY
+from backend.config import OPENAI_API_KEY, OPENAI_BASE_URL, OPENAI_MODEL, AGENT_CONCURRENCY
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ _client: AsyncOpenAI | None = None
 def _get_client() -> AsyncOpenAI:
     global _client
     if _client is None:
-        _client = AsyncOpenAI(api_key=OPENAI_API_KEY)
+        _client = AsyncOpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL)
     return _client
 
 

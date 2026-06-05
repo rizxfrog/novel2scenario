@@ -14,12 +14,23 @@ AI 小说转剧本工具 — 将小说文本自动转换为结构化剧本（JSO
 ```bash
 # Backend
 pip install -e ".[dev]"
-echo "OPENAI_API_KEY=sk-..." > .env
+cp .env.example .env
+# 编辑 .env 填入你的 API key、接口地址和模型名称
 
 # Frontend
 cd frontend
 npm install
 ```
+
+### 环境变量
+
+| 变量 | 必填 | 默认值 | 说明 |
+|------|------|--------|------|
+| `OPENAI_API_KEY` | 是 | - | API 密钥 |
+| `OPENAI_BASE_URL` | 是 | `https://api.openai.com/v1` | API 接口地址（支持任何 OpenAI 兼容接口） |
+| `OPENAI_MODEL` | 是 | `gpt-4o` | 模型名称 |
+| `DATABASE_PATH` | 否 | `novel2scenario.db` | 数据库文件路径 |
+| `AGENT_CONCURRENCY` | 否 | `5` | 并行 Agent 数量 |
 
 ### Run
 
