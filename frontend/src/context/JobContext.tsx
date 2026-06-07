@@ -88,7 +88,8 @@ export function JobProvider({ children }: { children: ReactNode }) {
       const job = await api.createJob(novelText, title, author);
       dispatch({ type: 'ADD_JOB', job });
       dispatch({ type: 'SET_ACTIVE_JOB', jobId: job.id });
-      // Load stages for the new job
+      // Auto-start the pipeline: run chapter_splitting
+      await api.continueJob(job.id);
       const stages = await api.getStages(job.id);
       dispatch({ type: 'SET_STAGES', stages });
       return job;
