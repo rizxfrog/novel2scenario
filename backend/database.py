@@ -89,6 +89,18 @@ CREATE TABLE IF NOT EXISTS adaptation_notes (
     type TEXT,
     description TEXT
 );
+
+CREATE TABLE IF NOT EXISTS stage_status (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    job_id INTEGER NOT NULL REFERENCES jobs(id) ON DELETE CASCADE,
+    stage TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending',
+    error_message TEXT,
+    output_summary TEXT,
+    started_at TEXT,
+    completed_at TEXT,
+    UNIQUE(job_id, stage)
+);
 """
 
 
