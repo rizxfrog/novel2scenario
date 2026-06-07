@@ -2,6 +2,7 @@ import os
 import tempfile
 import threading
 import pytest
+import yaml
 from fastapi.testclient import TestClient
 from backend.main import app
 from backend.database import init_db
@@ -100,17 +101,57 @@ def test_episode_routes(client):
     assert resp.json() == []
 
 
-def test_script_route(client):
+def test_script_route_default_json(client):
     resp = client.post("/api/jobs", json={"novel_text": SAMPLE_NOVEL})
     job_id = resp.json()["id"]
 
     resp = client.get(f"/api/jobs/{job_id}/script")
     assert resp.status_code == 200
+    assert resp.headers["content-type"] == "application/json"
     data = resp.json()
     assert "meta" in data
     assert "dramatis_personae" in data
     assert "episodes" in data
     assert "adaptation_notes" in data
+
+
+def test_script_route_format_json(client):
+    resp = client.post("/api/jobs", json={"novel_text": SAMPLE_NOVEL})
+    job_id = resp.json()["id"]
+
+    resp = client.get(f"/api/jobs/{job_id}/script?format=json")
+    assert resp.status_code == 200
+    assert resp.headers["content-type"] == "application/json"
+    assert "meta" in resp.json()
+
+
+def test_script_route_format_yaml(client):
+    resp = client.post("/api/jobs", json={"novel_text": SAMPLE_NOVEL})
+    job_id = resp.json()["id"]
+
+    resp = client.get(f"/api/jobs/{job_id}/script?format=yaml")
+    assert resp.status_code == 200
+    assert resp.headers["content-type"] == "application/x-yaml"
+
+    # Verify valid YAML with expected top-level keys
+    data = yaml.safe_load(resp.text)
+    assert isinstance(data, dict)
+    assert "meta" in data
+    assert "dramatis_personae" in data
+    assert "episodes" in data
+    assert "adaptation_notes" in data
+    # Verify meta fields
+    assert "title" in data["meta"]
+    assert "total_episodes" in data["meta"]
+    assert "total_chapters_in_novel" in data["meta"]
+
+
+def test_script_route_invalid_format(client):
+    resp = client.post("/api/jobs", json={"novel_text": SAMPLE_NOVEL})
+    job_id = resp.json()["id"]
+
+    resp = client.get(f"/api/jobs/{job_id}/script?format=xml")
+    assert resp.status_code == 422  # FastAPI validation error
 
 
 def test_job_not_found(client):
