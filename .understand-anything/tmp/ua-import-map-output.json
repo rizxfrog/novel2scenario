@@ -1,0 +1,211 @@
+{
+  "scriptCompleted": true,
+  "stats": {
+    "filesScanned": 79,
+    "filesWithImports": 36,
+    "totalEdges": 86
+  },
+  "importMap": {
+    ".env": [],
+    ".env.example": [],
+    ".python-version": [],
+    ".superpowers/brainstorm/2238-1780817272/content/approaches.html": [],
+    ".superpowers/brainstorm/2238-1780817272/content/layout-mockup.html": [],
+    ".superpowers/brainstorm/2238-1780817272/content/waiting.html": [],
+    ".superpowers/brainstorm/2238-1780817272/state/server-stopped": [],
+    ".superpowers/brainstorm/2238-1780817272/state/server.pid": [],
+    "backend/__init__.py": [],
+    "backend/agents/__init__.py": [],
+    "backend/agents/engine.py": [
+      "backend/config.py"
+    ],
+    "backend/agents/prompts.py": [],
+    "backend/config.py": [],
+    "backend/database.py": [],
+    "backend/main.py": [
+      "backend/database.py",
+      "backend/pipeline/orchestrator.py",
+      "backend/routes/ai_assist.py",
+      "backend/routes/characters.py",
+      "backend/routes/episodes.py",
+      "backend/routes/jobs.py",
+      "backend/routes/scenes.py"
+    ],
+    "backend/models.py": [],
+    "backend/pipeline/__init__.py": [],
+    "backend/pipeline/assembler.py": [
+      "backend/agents/engine.py",
+      "backend/agents/prompts.py"
+    ],
+    "backend/pipeline/characters.py": [
+      "backend/agents/engine.py",
+      "backend/agents/prompts.py"
+    ],
+    "backend/pipeline/episodes.py": [
+      "backend/agents/engine.py",
+      "backend/agents/prompts.py"
+    ],
+    "backend/pipeline/orchestrator.py": [
+      "backend/database.py",
+      "backend/pipeline/assembler.py",
+      "backend/pipeline/characters.py",
+      "backend/pipeline/episodes.py",
+      "backend/pipeline/scenes.py",
+      "backend/pipeline/splitter.py"
+    ],
+    "backend/pipeline/scenes.py": [
+      "backend/agents/engine.py",
+      "backend/agents/prompts.py"
+    ],
+    "backend/pipeline/splitter.py": [
+      "backend/agents/engine.py",
+      "backend/agents/prompts.py"
+    ],
+    "backend/routes/__init__.py": [],
+    "backend/routes/ai_assist.py": [
+      "backend/agents/engine.py",
+      "backend/models.py"
+    ],
+    "backend/routes/characters.py": [
+      "backend/models.py",
+      "backend/pipeline/orchestrator.py"
+    ],
+    "backend/routes/episodes.py": [
+      "backend/models.py",
+      "backend/pipeline/orchestrator.py"
+    ],
+    "backend/routes/jobs.py": [
+      "backend/models.py",
+      "backend/pipeline/orchestrator.py"
+    ],
+    "backend/routes/scenes.py": [
+      "backend/models.py",
+      "backend/pipeline/orchestrator.py"
+    ],
+    "doc/script-yaml-schema.md": [],
+    "docs/plans/2026-06-05-novel-to-script.md": [],
+    "docs/plans/2026-06-07-pipeline-rebuild.md": [],
+    "docs/superpowers/specs/2026-06-05-novel-to-script-design.md": [],
+    "docs/superpowers/specs/2026-06-07-pipeline-rebuild-design.md": [],
+    "frontend/index.html": [],
+    "frontend/package.json": [],
+    "frontend/src/api.ts": [],
+    "frontend/src/App.tsx": [
+      "frontend/src/components/PipelineView.tsx",
+      "frontend/src/context/JobContext.tsx"
+    ],
+    "frontend/src/components/PipelineView.module.css": [],
+    "frontend/src/components/PipelineView.tsx": [
+      "frontend/src/api.ts",
+      "frontend/src/components/PipelineView.module.css",
+      "frontend/src/components/Sidebar.tsx",
+      "frontend/src/components/StagePanel.tsx",
+      "frontend/src/components/stages/ChapterStage.tsx",
+      "frontend/src/components/stages/CharacterStage.tsx",
+      "frontend/src/components/stages/EpisodeStage.tsx",
+      "frontend/src/components/stages/SceneStage.tsx",
+      "frontend/src/components/stages/ScriptStage.tsx",
+      "frontend/src/components/stages/UploadStage.tsx",
+      "frontend/src/components/StatusBar.tsx",
+      "frontend/src/context/JobContext.tsx"
+    ],
+    "frontend/src/components/Sidebar.module.css": [],
+    "frontend/src/components/Sidebar.tsx": [
+      "frontend/src/components/Sidebar.module.css",
+      "frontend/src/context/JobContext.tsx"
+    ],
+    "frontend/src/components/StagePanel.module.css": [],
+    "frontend/src/components/StagePanel.tsx": [
+      "frontend/src/api.ts",
+      "frontend/src/components/StagePanel.module.css"
+    ],
+    "frontend/src/components/stages/ChapterStage.module.css": [],
+    "frontend/src/components/stages/ChapterStage.tsx": [
+      "frontend/src/components/stages/ChapterStage.module.css",
+      "frontend/src/context/JobContext.tsx"
+    ],
+    "frontend/src/components/stages/CharacterStage.module.css": [],
+    "frontend/src/components/stages/CharacterStage.tsx": [
+      "frontend/src/api.ts",
+      "frontend/src/components/stages/CharacterStage.module.css",
+      "frontend/src/context/JobContext.tsx"
+    ],
+    "frontend/src/components/stages/EpisodeStage.module.css": [],
+    "frontend/src/components/stages/EpisodeStage.tsx": [
+      "frontend/src/api.ts",
+      "frontend/src/components/stages/EpisodeStage.module.css",
+      "frontend/src/context/JobContext.tsx"
+    ],
+    "frontend/src/components/stages/SceneStage.module.css": [],
+    "frontend/src/components/stages/SceneStage.tsx": [
+      "frontend/src/api.ts",
+      "frontend/src/components/stages/SceneStage.module.css",
+      "frontend/src/context/JobContext.tsx"
+    ],
+    "frontend/src/components/stages/ScriptStage.module.css": [],
+    "frontend/src/components/stages/ScriptStage.tsx": [
+      "frontend/src/api.ts",
+      "frontend/src/components/stages/ScriptStage.module.css",
+      "frontend/src/context/JobContext.tsx"
+    ],
+    "frontend/src/components/stages/UploadStage.module.css": [],
+    "frontend/src/components/stages/UploadStage.tsx": [
+      "frontend/src/components/stages/UploadStage.module.css",
+      "frontend/src/context/JobContext.tsx"
+    ],
+    "frontend/src/components/StatusBar.module.css": [],
+    "frontend/src/components/StatusBar.tsx": [
+      "frontend/src/components/StatusBar.module.css",
+      "frontend/src/context/JobContext.tsx"
+    ],
+    "frontend/src/context/JobContext.tsx": [
+      "frontend/src/api.ts",
+      "frontend/src/context/reducer.ts"
+    ],
+    "frontend/src/context/reducer.ts": [
+      "frontend/src/api.ts"
+    ],
+    "frontend/src/index.css": [],
+    "frontend/src/main.tsx": [
+      "frontend/src/App.tsx",
+      "frontend/src/index.css"
+    ],
+    "frontend/src/vite-env.d.ts": [],
+    "frontend/tsconfig.json": [],
+    "frontend/vite.config.ts": [],
+    "identifier.sqlite": [],
+    "main.py": [],
+    "pyproject.toml": [],
+    "README.md": [],
+    "tests/sample_novel.txt": [],
+    "tests/test_agent_engine.py": [
+      "backend/agents/engine.py"
+    ],
+    "tests/test_assembler.py": [
+      "backend/pipeline/assembler.py"
+    ],
+    "tests/test_characters.py": [
+      "backend/pipeline/characters.py"
+    ],
+    "tests/test_database.py": [
+      "backend/database.py"
+    ],
+    "tests/test_episodes.py": [
+      "backend/pipeline/episodes.py"
+    ],
+    "tests/test_integration.py": [
+      "backend/database.py",
+      "backend/main.py"
+    ],
+    "tests/test_orchestrator.py": [
+      "backend/database.py",
+      "backend/pipeline/orchestrator.py"
+    ],
+    "tests/test_scenes.py": [
+      "backend/pipeline/scenes.py"
+    ],
+    "tests/test_splitter.py": [
+      "backend/pipeline/splitter.py"
+    ]
+  }
+}

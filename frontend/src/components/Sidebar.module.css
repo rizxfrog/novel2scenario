@@ -78,9 +78,9 @@
 }
 
 .statusDone { color: #4ecca3; }
-.statusReview { color: #e94560; }
+.statusReview { color: #f0a020; }
 .statusFailed { color: #ff6b6b; }
-.statusRunning { color: #e94560; }
+.statusRunning { color: #f0a020; }
 .statusQueued { color: #888; }
 
 .deleteBtn {

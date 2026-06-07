@@ -149,4 +149,10 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ from_stage: fromStage, rerun_stages: rerunStages }),
     }),
+
+  aiAssist: (jobId: number, stage: string, instruction: string, currentData: any) =>
+    request<any>(`/jobs/${jobId}/ai-assist`, {
+      method: 'POST',
+      body: JSON.stringify({ stage, instruction, current_data: currentData }),
+    }),
 };

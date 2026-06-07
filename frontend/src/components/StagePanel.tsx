@@ -8,7 +8,7 @@ interface StagePanelProps {
   index: number;
   children: ReactNode;
   onRetry?: () => void;
-  onContinue?: (rerunStages: string[]) => void;
+  onSaveAndContinue?: (rerunStages: string[]) => void;
   canRetryFrom?: boolean;
 }
 
@@ -25,7 +25,7 @@ const STAGE_NAMES: Record<string, string> = {
   script_assembly: '剧本生成',
 };
 
-export function StagePanel({ stage, label, index, children, onRetry, onContinue, canRetryFrom }: StagePanelProps) {
+export function StagePanel({ stage, label, index, children, onRetry, onSaveAndContinue, canRetryFrom }: StagePanelProps) {
   const [expanded, setExpanded] = useState(stage.status === 'awaiting_review' || stage.status === 'failed');
   const [rerunStages, setRerunStages] = useState<string[]>([]);
   const isLocked = stage.status === 'pending' && index > 1;
@@ -100,7 +100,7 @@ export function StagePanel({ stage, label, index, children, onRetry, onContinue,
           )}
           {children}
 
-          {stage.status === 'awaiting_review' && onContinue && (
+          {stage.status === 'awaiting_review' && onSaveAndContinue && (
             <div className={styles.actions}>
               <div className={styles.checkboxes}>
                 {downstreamStages.map(s => (
@@ -122,7 +122,7 @@ export function StagePanel({ stage, label, index, children, onRetry, onContinue,
               </div>
               <button
                 className={styles.continueBtn}
-                onClick={() => onContinue(rerunStages)}
+                onClick={() => onSaveAndContinue(rerunStages)}
               >
                 保存并继续
               </button>

@@ -1,0 +1,134 @@
+[
+  {
+    "id": "layer:api",
+    "name": "API 路由层",
+    "description": "FastAPI HTTP 端点处理器，负责请求解析、路由分发和响应格式化，通过编排器委托业务逻辑，包含作业管理、角色/场景/剧集 CRUD 和 AI 辅助编辑接口",
+    "nodeIds": [
+      "file:backend/routes/ai_assist.py",
+      "file:backend/routes/characters.py",
+      "file:backend/routes/episodes.py",
+      "file:backend/routes/jobs.py",
+      "file:backend/routes/scenes.py",
+      "file:backend/routes/__init__.py"
+    ]
+  },
+  {
+    "id": "layer:service",
+    "name": "业务服务层",
+    "description": "小说到剧本转换管线的核心编排器和五个阶段实现（分章、角色提取、场景分析、剧集结构化、剧本组装），驱动状态机推进和阶段间数据流转",
+    "nodeIds": [
+      "file:backend/pipeline/orchestrator.py",
+      "file:backend/pipeline/assembler.py",
+      "file:backend/pipeline/characters.py",
+      "file:backend/pipeline/episodes.py",
+      "file:backend/pipeline/scenes.py",
+      "file:backend/pipeline/splitter.py",
+      "file:backend/pipeline/__init__.py"
+    ]
+  },
+  {
+    "id": "layer:ai-agent",
+    "name": "AI 引擎层",
+    "description": "OpenAI GPT-4o Agent 引擎核心，提供异步客户端管理、带重试的智能体调用、鲁棒 JSON 解析（含截断修复）和并发并行执行能力，以及五阶段 LLM 提示词模板",
+    "nodeIds": [
+      "file:backend/agents/engine.py",
+      "file:backend/agents/prompts.py",
+      "file:backend/agents/__init__.py"
+    ]
+  },
+  {
+    "id": "layer:data",
+    "name": "数据层",
+    "description": "SQLite 数据库连接管理（WAL 模式、线程本地存储）和 Pydantic v2 数据模型定义（15 个模型类涵盖作业、角色、场景、剧集、剧本的请求/响应 Schema）",
+    "nodeIds": [
+      "file:backend/database.py",
+      "file:backend/models.py"
+    ]
+  },
+  {
+    "id": "layer:config",
+    "name": "配置与入口层",
+    "description": "环境变量配置、FastAPI 应用启动（CORS、路由注册、数据库初始化）、uvicorn 服务器入口、Python/Node 项目构建配置和版本管理",
+    "nodeIds": [
+      "file:backend/config.py",
+      "file:backend/main.py",
+      "file:backend/__init__.py",
+      "file:main.py",
+      "config:.env",
+      "config:.env.example",
+      "config:pyproject.toml",
+      "file:.python-version",
+      "config:frontend/package.json",
+      "config:frontend/tsconfig.json",
+      "file:frontend/vite.config.ts"
+    ]
+  },
+  {
+    "id": "layer:frontend",
+    "name": "前端层",
+    "description": "React 18 + TypeScript 单页面应用，采用 JobContext 全局状态管理（useReducer + Context），组件化流水线视图包含侧边栏、六阶段面板（上传/分章/角色/场景/剧集/剧本）和状态栏，通过 api.ts 客户端与后端通信",
+    "nodeIds": [
+      "file:frontend/src/App.tsx",
+      "file:frontend/src/api.ts",
+      "file:frontend/src/main.tsx",
+      "file:frontend/src/index.css",
+      "file:frontend/src/vite-env.d.ts",
+      "file:frontend/src/context/JobContext.tsx",
+      "file:frontend/src/context/reducer.ts",
+      "file:frontend/src/components/PipelineView.tsx",
+      "file:frontend/src/components/Sidebar.tsx",
+      "file:frontend/src/components/StagePanel.tsx",
+      "file:frontend/src/components/StatusBar.tsx",
+      "file:frontend/src/components/stages/UploadStage.tsx",
+      "file:frontend/src/components/stages/ChapterStage.tsx",
+      "file:frontend/src/components/stages/CharacterStage.tsx",
+      "file:frontend/src/components/stages/SceneStage.tsx",
+      "file:frontend/src/components/stages/EpisodeStage.tsx",
+      "file:frontend/src/components/stages/ScriptStage.tsx",
+      "file:frontend/src/components/PipelineView.module.css",
+      "file:frontend/src/components/Sidebar.module.css",
+      "file:frontend/src/components/StagePanel.module.css",
+      "file:frontend/src/components/StatusBar.module.css",
+      "file:frontend/src/components/stages/UploadStage.module.css",
+      "file:frontend/src/components/stages/ChapterStage.module.css",
+      "file:frontend/src/components/stages/CharacterStage.module.css",
+      "file:frontend/src/components/stages/SceneStage.module.css",
+      "file:frontend/src/components/stages/EpisodeStage.module.css",
+      "file:frontend/src/components/stages/ScriptStage.module.css",
+      "file:frontend/index.html"
+    ]
+  },
+  {
+    "id": "layer:tests",
+    "name": "测试层",
+    "description": "pytest 单元测试和 FastAPI TestClient 集成测试，覆盖 Agent 引擎、五个管线阶段、数据库初始化、编排器推进和端到端 API 流程，包含中文小说测试样本数据",
+    "nodeIds": [
+      "file:tests/test_agent_engine.py",
+      "file:tests/test_assembler.py",
+      "file:tests/test_characters.py",
+      "file:tests/test_database.py",
+      "file:tests/test_episodes.py",
+      "file:tests/test_integration.py",
+      "file:tests/test_orchestrator.py",
+      "file:tests/test_scenes.py",
+      "file:tests/test_splitter.py",
+      "document:tests/sample_novel.txt"
+    ]
+  },
+  {
+    "id": "layer:documentation",
+    "name": "文档层",
+    "description": "项目文档体系，包含 README 快速入门、YAML Schema 规范、实施计划与设计文档、前端管线重构方案和 Brainstorm 会话产物",
+    "nodeIds": [
+      "document:README.md",
+      "document:doc/script-yaml-schema.md",
+      "document:docs/plans/2026-06-05-novel-to-script.md",
+      "document:docs/plans/2026-06-07-pipeline-rebuild.md",
+      "document:docs/superpowers/specs/2026-06-05-novel-to-script-design.md",
+      "document:docs/superpowers/specs/2026-06-07-pipeline-rebuild-design.md",
+      "file:.superpowers/brainstorm/2238-1780817272/content/approaches.html",
+      "file:.superpowers/brainstorm/2238-1780817272/content/layout-mockup.html",
+      "file:.superpowers/brainstorm/2238-1780817272/content/waiting.html"
+    ]
+  }
+]

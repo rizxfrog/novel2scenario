@@ -1,0 +1,39 @@
+{
+  "approved": true,
+  "issues": [],
+  "warnings": [
+    "8 个孤立节点（无边连接）：file:.python-version, file:backend/__init__.py, file:backend/agents/__init__.py, file:backend/routes/__init__.py, file:frontend/src/vite-env.d.ts, file:frontend/vite.config.ts, document:tests/sample_novel.txt, file:.superpowers/brainstorm/2238-1780817272/content/waiting.html",
+    "文档节点 \"document:tests/sample_novel.txt\" 缺少 \"documents\" 类型的边"
+  ],
+  "stats": {
+    "totalNodes": 268,
+    "totalEdges": 517,
+    "totalLayers": 8,
+    "tourSteps": 11,
+    "nodeTypes": {
+      "file": 64,
+      "function": 98,
+      "class": 15,
+      "config": 5,
+      "document": 8,
+      "domain": 4,
+      "flow": 14,
+      "step": 48,
+      "concept": 12
+    },
+    "edgeTypes": {
+      "imports": 86,
+      "contains": 113,
+      "exports": 112,
+      "calls": 71,
+      "tested_by": 11,
+      "related": 24,
+      "documents": 21,
+      "depends_on": 9,
+      "configures": 2,
+      "contains_flow": 14,
+      "flow_step": 48,
+      "cross_domain": 6
+    }
+  }
+}

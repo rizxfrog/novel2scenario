@@ -4,10 +4,19 @@ import { api } from '../../api';
 import type { Episode } from '../../api';
 import styles from './EpisodeStage.module.css';
 
-export function EpisodeStage() {
+const EMPTY_EPISODE: Episode = {
+  id: 0, job_id: 0, number: 1,
+  title: '', summary: '', novel_chapters: [], scene_ids: [],
+};
+
+export function EpisodeStage({ setData }: { setData?: (data: any) => void }) {
   const { state } = useJobs();
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [loading, setLoading] = useState(false);
+  const [aiInstruction, setAiInstruction] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+  const [showAiPanel, setShowAiPanel] = useState(false);
 
   useEffect(() => {
     if (state.activeJobId) {
@@ -15,8 +24,21 @@ export function EpisodeStage() {
     }
   }, [state.activeJobId]);
 
+  // Report data changes to PipelineView for save-and-continue
+  useEffect(() => {
+    setData?.(episodes);
+  }, [episodes, setData]);
+
   const updateField = (index: number, field: keyof Episode, value: unknown) => {
     setEpisodes(prev => prev.map((ep, i) => i === index ? { ...ep, [field]: value } : ep));
+  };
+
+  const addEpisode = () => {
+    setEpisodes(prev => [...prev, { ...EMPTY_EPISODE, number: prev.length + 1 }]);
+  };
+
+  const deleteEpisode = (index: number) => {
+    setEpisodes(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSave = async () => {
@@ -29,16 +51,50 @@ export function EpisodeStage() {
     }
   };
 
-  if (episodes.length === 0) {
-    return <p className={styles.empty}>暂无分集数据</p>;
+  const handleAiAssist = async () => {
+    if (!state.activeJobId || !aiInstruction.trim()) return;
+    setAiLoading(true);
+    setAiError(null);
+    try {
+      const result = await api.aiAssist(
+        state.activeJobId,
+        'episode_structuring',
+        aiInstruction.trim(),
+        { episodes },
+      );
+      if (result.data?.episodes) {
+        setEpisodes(result.data.episodes);
+      }
+    } catch (e: any) {
+      setAiError(e.message || 'AI 修改失败');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  if (episodes.length === 0 && !showAiPanel) {
+    return (
+      <div>
+        <p className={styles.empty}>暂无分集数据</p>
+        <div className={styles.toolbar}>
+          <button className={styles.addBtn} onClick={addEpisode}>+ 添加分集</button>
+          <button className={styles.aiToggleBtn} onClick={() => setShowAiPanel(true)}>AI 辅助修改</button>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div>
       {episodes.map((ep, i) => (
-        <div key={ep.id} className={styles.episode}>
+        <div key={ep.id || i} className={styles.episode}>
           <div className={styles.header}>
             <span className={styles.number}>第 {ep.number} 集</span>
+            <button
+              className={styles.deleteBtn}
+              onClick={() => deleteEpisode(i)}
+              title="删除分集"
+            >x</button>
           </div>
           <div className={styles.body}>
             <input
@@ -61,9 +117,39 @@ export function EpisodeStage() {
           </div>
         </div>
       ))}
-      <button className={styles.saveBtn} onClick={handleSave} disabled={loading}>
-        {loading ? '保存中...' : '保存分集'}
-      </button>
+
+      <div className={styles.toolbar}>
+        <button className={styles.addBtn} onClick={addEpisode}>+ 添加分集</button>
+        <button className={styles.saveBtn} onClick={handleSave} disabled={loading}>
+          {loading ? '保存中...' : '保存分集'}
+        </button>
+      </div>
+
+      {/* AI Assist Panel */}
+      <div className={styles.aiPanel}>
+        <button className={styles.aiToggleBtn} onClick={() => setShowAiPanel(!showAiPanel)}>
+          {showAiPanel ? '收起 AI 面板' : 'AI 辅助修改'}
+        </button>
+        {showAiPanel && (
+          <div className={styles.aiBody}>
+            <textarea
+              className={styles.aiInput}
+              value={aiInstruction}
+              onChange={e => setAiInstruction(e.target.value)}
+              placeholder="描述你想要的修改，例如：'请把第1集拆分成两集' 或 '调整第3集的场景顺序'"
+              rows={3}
+            />
+            {aiError && <p className={styles.aiError}>{aiError}</p>}
+            <button
+              className={styles.aiBtn}
+              onClick={handleAiAssist}
+              disabled={aiLoading || !aiInstruction.trim()}
+            >
+              {aiLoading ? 'AI 思考中...' : 'AI 辅助修改'}
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
