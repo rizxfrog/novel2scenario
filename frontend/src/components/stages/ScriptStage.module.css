@@ -34,3 +34,15 @@
   font-weight: 500;
 }
 .downloadBtn:hover { background: #3db88e; }
+
+.downloadYamlBtn {
+  padding: 8px 20px;
+  background: transparent;
+  color: #4ecca3;
+  border: 1px solid #4ecca3;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+.downloadYamlBtn:hover { background: rgba(78, 204, 163, 0.1); }
