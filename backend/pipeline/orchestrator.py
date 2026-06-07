@@ -167,6 +167,8 @@ async def _run_scene_analysis(job_id: int) -> None:
         "SELECT * FROM chapters WHERE job_id = ? ORDER BY number", (job_id,)
     ).fetchall()
     chapters = [dict(r) for r in chapters_raw]
+    # Build number -> id mapping
+    chapter_id_map = {ch["number"]: ch["id"] for ch in chapters}
 
     scenes = await analyze_scenes(chapters)
 
@@ -174,9 +176,10 @@ async def _run_scene_analysis(job_id: int) -> None:
     db.execute("DELETE FROM scenes WHERE job_id = ?", (job_id,))
 
     for global_num, scene in enumerate(scenes, 1):
+        chapter_id = chapter_id_map.get(scene.get("chapter_number"), chapters[0]["id"] if chapters else 1)
         cursor = db.execute(
             "INSERT INTO scenes (job_id, chapter_id, number, heading, setting_json, summary, characters_present) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (job_id, 1, global_num, scene.get("heading"),
+            (job_id, chapter_id, global_num, scene.get("heading"),
              json.dumps(scene.get("setting", {})), scene.get("summary"),
              json.dumps(scene.get("characters_present", []))),
         )

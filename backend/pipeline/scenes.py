@@ -24,8 +24,10 @@ async def analyze_scenes(chapters: list[dict]) -> list[dict]:
     ]
     results = await run_parallel(_analyze_chapter, items)
     all_scenes = []
-    for result in results:
+    for idx, result in enumerate(results):
+        chapter_number = items[idx]["number"]
         for scene in result.get("scenes", []):
+            scene["chapter_number"] = chapter_number
             all_scenes.append(scene)
     logger.info(f"Analyzed {len(all_scenes)} scenes from {len(chapters)} chapters")
     return all_scenes
