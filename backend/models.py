@@ -114,6 +114,11 @@ class EpisodeUpdate(BaseModel):
     scene_ids: list[int]
 
 
+class RetryRequest(BaseModel):
+    from_stage: str
+    rerun_stages: list[str] = []
+
+
 # --- Script Output ---
 class ScriptMeta(BaseModel):
     title: str

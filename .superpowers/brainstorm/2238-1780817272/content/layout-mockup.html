@@ -1,0 +1,375 @@
+<h2>Pipeline View — Layout Mockup</h2>
+<p class="subtitle">Single-page app with Sidebar, Pipeline Panel, and StatusBar</p>
+
+<!-- Full Layout -->
+<div class="mockup" style="margin-bottom: 20px;">
+  <div class="mockup-header">整体布局</div>
+  <div class="mockup-body" style="padding: 0; background: #1a1a2e;">
+    <!-- Header -->
+    <div style="
+      background: #16213e; padding: 10px 20px; display: flex;
+      align-items: center; justify-content: space-between;
+      border-bottom: 1px solid #0f3460;
+    ">
+      <span style="color: #e94560; font-weight: bold; font-size: 16px;">Novel2Scenario</span>
+      <span style="color: #888; font-size: 12px;">AI 小说转剧本工具</span>
+    </div>
+    <!-- Body: Sidebar + Main -->
+    <div style="display: flex; height: 450px;">
+      <!-- Sidebar -->
+      <div style="
+        width: 250px; background: #16213e; padding: 15px;
+        border-right: 1px solid #0f3460; display: flex; flex-direction: column;
+      ">
+        <input style="
+          width: 100%; padding: 6px 10px; border: 1px solid #0f3460;
+          background: #1a1a2e; color: #ccc; border-radius: 4px;
+          font-size: 12px; margin-bottom: 10px; box-sizing: border-box;
+        " placeholder="搜索 Job...">
+        <button style="
+          width: 100%; padding: 6px; background: #e94560; color: white;
+          border: none; border-radius: 4px; cursor: pointer; font-size: 12px;
+          margin-bottom: 15px;
+        ">+ 新建 Job</button>
+        <div style="flex: 1; overflow-y: auto;">
+          <div style="
+            padding: 10px; margin-bottom: 6px; border-radius: 4px;
+            background: #0f3460; cursor: pointer; border-left: 3px solid #4ecca3;
+          ">
+            <div style="color: #eee; font-size: 13px; font-weight: 500;">斗破苍穹</div>
+            <div style="color: #4ecca3; font-size: 11px; margin-top: 3px;">
+              episode_structuring
+            </div>
+          </div>
+          <div style="
+            padding: 10px; margin-bottom: 6px; border-radius: 4px;
+            cursor: pointer; opacity: 0.7;
+          ">
+            <div style="color: #ccc; font-size: 13px;">凡人修仙传</div>
+            <div style="color: #888; font-size: 11px; margin-top: 3px;">completed</div>
+          </div>
+          <div style="
+            padding: 10px; margin-bottom: 6px; border-radius: 4px;
+            cursor: pointer; opacity: 0.7;
+          ">
+            <div style="color: #ccc; font-size: 13px;">庆余年</div>
+            <div style="color: #e94560; font-size: 11px; margin-top: 3px;">failed</div>
+          </div>
+        </div>
+      </div>
+      <!-- Main Pipeline View -->
+      <div style="
+        flex: 1; padding: 20px; overflow-y: auto; display: flex;
+        flex-direction: column; gap: 12px;
+      ">
+        <!-- Stage 1: Upload -->
+        <div style="
+          border: 1px solid #4ecca3; border-radius: 6px;
+          background: #1a1a2e; overflow: hidden;
+        ">
+          <div style="
+            background: #0f3460; padding: 10px 15px; display: flex;
+            align-items: center; gap: 10px; cursor: pointer;
+          ">
+            <span style="
+              width: 22px; height: 22px; border-radius: 50%;
+              background: #4ecca3; color: #1a1a2e; font-size: 12px;
+              display: flex; align-items: center; justify-content: center;
+              font-weight: bold;
+            ">✓</span>
+            <span style="color: #eee; font-weight: 500;">上传小说</span>
+            <span style="margin-left: auto; color: #4ecca3; font-size: 11px;">完成</span>
+          </div>
+        </div>
+
+        <!-- Stage 2: Chapter Splitting -->
+        <div style="
+          border: 1px solid #0f3460; border-radius: 6px;
+          background: #1a1a2e; overflow: hidden;
+        ">
+          <div style="
+            background: #1a1a2e; padding: 10px 15px; display: flex;
+            align-items: center; gap: 10px; cursor: pointer;
+          ">
+            <span style="
+              width: 22px; height: 22px; border-radius: 50%;
+              background: #4ecca3; color: #1a1a2e; font-size: 12px;
+              display: flex; align-items: center; justify-content: center;
+              font-weight: bold;
+            ">✓</span>
+            <span style="color: #eee; font-weight: 500;">章节拆分</span>
+            <span style="margin-left: auto; color: #888; font-size: 11px;">12 章</span>
+          </div>
+          <div style="padding: 10px 15px; border-top: 1px solid #0f3460; display: flex; gap: 8px;">
+            <button style="
+              padding: 4px 12px; background: #0f3460; color: #ccc;
+              border: none; border-radius: 3px; cursor: pointer; font-size: 11px;
+            ">查看详情</button>
+            <button style="
+              padding: 4px 12px; background: none; color: #e94560;
+              border: 1px solid #e94560; border-radius: 3px;
+              cursor: pointer; font-size: 11px;
+            ">从此重新运行</button>
+          </div>
+        </div>
+
+        <!-- Stage 3: Character Extraction (current/active) -->
+        <div style="
+          border: 1px solid #e94560; border-radius: 6px;
+          background: #1a1a2e; overflow: hidden; position: relative;
+        ">
+          <div style="
+            background: #1a1a2e; padding: 10px 15px; display: flex;
+            align-items: center; gap: 10px; cursor: pointer;
+          ">
+            <span style="
+              width: 22px; height: 22px; border-radius: 50%;
+              background: #e94560; color: white; font-size: 14px;
+              display: flex; align-items: center; justify-content: center;
+            ">3</span>
+            <span style="color: #eee; font-weight: 500;">角色提取</span>
+            <span style="margin-left: auto; color: #e94560; font-size: 11px;">等待审核</span>
+            <span style="
+              animation: pulse 1.5s infinite; width: 6px; height: 6px;
+              border-radius: 50%; background: #e94560;
+            "></span>
+          </div>
+          <!-- Expanded panel -->
+          <div style="padding: 15px; border-top: 1px solid #0f3460;">
+            <!-- Character cards -->
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+              <div style="
+                padding: 8px 12px; background: #0f3460; border-radius: 4px;
+                font-size: 12px; min-width: 100px;
+              ">
+                <div style="color: #eee; font-weight: 500;">萧炎</div>
+                <div style="color: #888;">主角</div>
+              </div>
+              <div style="
+                padding: 8px 12px; background: #0f3460; border-radius: 4px;
+                font-size: 12px; min-width: 100px;
+              ">
+                <div style="color: #eee; font-weight: 500;">药老</div>
+                <div style="color: #888;">导师</div>
+              </div>
+              <div style="
+                padding: 8px 12px; background: #0f3460; border-radius: 4px;
+                font-size: 12px; min-width: 100px;
+              ">
+                <div style="color: #eee; font-weight: 500;">萧薰儿</div>
+                <div style="color: #888;">女主</div>
+              </div>
+              <div style="
+                padding: 8px 12px; background: #0f3460; border-radius: 4px;
+                font-size: 12px; min-width: 100px; opacity: 0.5;
+              ">
+                <div style="color: #ccc;">+ 添加</div>
+              </div>
+            </div>
+            <!-- Action bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <label style="color: #888; font-size: 11px; cursor: pointer;">
+                  <input type="checkbox" checked style="margin-right: 3px;">场景分析
+                </label>
+                <label style="color: #888; font-size: 11px; cursor: pointer;">
+                  <input type="checkbox" checked style="margin-right: 3px;">分集组织
+                </label>
+                <label style="color: #888; font-size: 11px; cursor: pointer;">
+                  <input type="checkbox" checked style="margin-right: 3px;">剧本生成
+                </label>
+              </div>
+              <button style="
+                padding: 6px 18px; background: #e94560; color: white;
+                border: none; border-radius: 4px; cursor: pointer; font-size: 12px;
+              ">保存并重新运行下游</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 4: Scene Analysis (locked) -->
+        <div style="
+          border: 1px solid #222; border-radius: 6px;
+          background: #1a1a2e; overflow: hidden; opacity: 0.4;
+        ">
+          <div style="
+            padding: 10px 15px; display: flex;
+            align-items: center; gap: 10px;
+          ">
+            <span style="
+              width: 22px; height: 22px; border-radius: 50%;
+              background: #333; color: #666; font-size: 12px;
+              display: flex; align-items: center; justify-content: center;
+            ">4</span>
+            <span style="color: #666; font-weight: 500;">场景分析</span>
+            <span style="margin-left: auto; color: #555; font-size: 11px;">等待上游完成</span>
+          </div>
+        </div>
+
+        <!-- Stage 5: Episode Structuring (locked) -->
+        <div style="
+          border: 1px solid #222; border-radius: 6px;
+          background: #1a1a2e; overflow: hidden; opacity: 0.4;
+        ">
+          <div style="
+            padding: 10px 15px; display: flex;
+            align-items: center; gap: 10px;
+          ">
+            <span style="
+              width: 22px; height: 22px; border-radius: 50%;
+              background: #333; color: #666; font-size: 12px;
+              display: flex; align-items: center; justify-content: center;
+            ">5</span>
+            <span style="color: #666; font-weight: 500;">分集组织</span>
+            <span style="margin-left: auto; color: #555; font-size: 11px;">等待上游完成</span>
+          </div>
+        </div>
+
+        <!-- Stage 6: Script Assembly (locked) -->
+        <div style="
+          border: 1px solid #222; border-radius: 6px;
+          background: #1a1a2e; overflow: hidden; opacity: 0.4;
+        ">
+          <div style="
+            padding: 10px 15px; display: flex;
+            align-items: center; gap: 10px;
+          ">
+            <span style="
+              width: 22px; height: 22px; border-radius: 50%;
+              background: #333; color: #666; font-size: 12px;
+              display: flex; align-items: center; justify-content: center;
+            ">6</span>
+            <span style="color: #666; font-weight: 500;">剧本生成</span>
+            <span style="margin-left: auto; color: #555; font-size: 11px;">等待上游完成</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Status Bar -->
+    <div style="
+      background: #0f3460; padding: 8px 20px; display: flex;
+      align-items: center; justify-content: space-between;
+      border-top: 1px solid #16213e; font-size: 12px;
+    ">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <span style="color: #888;">Job: <span style="color: #ccc;">斗破苍穹</span></span>
+        <span style="color: #888;">阶段: <span style="color: #e94560;">3/6 角色提取</span></span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <span style="color: #ccc;">状态: </span>
+        <span style="
+          background: #e94560; padding: 2px 8px; border-radius: 3px;
+          color: white; font-size: 10px;
+        ">等待审核</span>
+        <span style="color: #888;">等待用户确认角色提取结果</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Stage States Design</h3>
+  <p class="subtitle">每个阶段的 5 种视觉状态</p>
+</div>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">pending（未开始）</div>
+    <div class="mockup-body" style="background: #1a1a2e; padding: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px; opacity: 0.3;">
+        <span style="width: 20px; height: 20px; border-radius: 50%; background: #333; display: inline-block;"></span>
+        <span style="color: #666;">场景分析</span>
+        <span style="margin-left: auto; color: #555;">等待上游</span>
+      </div>
+    </div>
+  </div>
+  <div class="mockup">
+    <div class="mockup-header">running（运行中）</div>
+    <div class="mockup-body" style="background: #1a1a2e; padding: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="
+          width: 20px; height: 20px; border-radius: 50%;
+          border: 2px solid #e94560; border-top-color: transparent;
+          display: inline-block; animation: spin 0.8s linear infinite;
+        "></div>
+        <span style="color: #eee;">章节拆分</span>
+        <span style="margin-left: auto; color: #e94560;">正在分析...</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">awaiting_review（审核中）</div>
+    <div class="mockup-body" style="background: #1a1a2e; padding: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="
+          width: 20px; height: 20px; border-radius: 50%;
+          background: #e94560; display: flex; align-items: center;
+          justify-content: center; color: white; font-size: 12px;
+        ">!</span>
+        <span style="color: #eee;">角色提取</span>
+        <span style="margin-left: auto; color: #e94560;">等待审核</span>
+      </div>
+    </div>
+  </div>
+  <div class="mockup">
+    <div class="mockup-header">completed（完成）</div>
+    <div class="mockup-body" style="background: #1a1a2e; padding: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="
+          width: 20px; height: 20px; border-radius: 50%;
+          background: #4ecca3; display: flex; align-items: center;
+          justify-content: center; color: #1a1a2e; font-size: 12px; font-weight: bold;
+        ">✓</span>
+        <span style="color: #eee;">章节拆分</span>
+        <span style="margin-left: auto; color: #4ecca3;">12 章</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mockup" style="margin-top: 15px;">
+  <div class="mockup-header">failed（失败）</div>
+  <div class="mockup-body" style="background: #1a1a2e; padding: 10px;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="
+        width: 20px; height: 20px; border-radius: 50%;
+        background: #ff6b6b; display: flex; align-items: center;
+        justify-content: center; color: white; font-size: 14px;
+      ">✕</span>
+      <span style="color: #eee;">角色提取</span>
+      <span style="margin-left: auto; color: #ff6b6b;">失败</span>
+    </div>
+    <div style="
+      margin-top: 8px; padding: 8px 12px; background: rgba(255, 107, 107, 0.1);
+      border-left: 3px solid #ff6b6b; border-radius: 3px;
+      color: #ff6b6b; font-size: 11px;
+    ">
+      API 调用超时：连接 OpenAI 服务失败，请检查网络和 API Key 配置。
+    </div>
+    <div style="margin-top: 8px; display: flex; gap: 6px;">
+      <button style="
+        padding: 4px 12px; background: #ff6b6b; color: white;
+        border: none; border-radius: 3px; cursor: pointer; font-size: 11px;
+      ">重试</button>
+      <button style="
+        padding: 4px 12px; background: none; color: #888;
+        border: 1px solid #555; border-radius: 3px;
+        cursor: pointer; font-size: 11px;
+      ">查看日志</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+</style>

@@ -1,0 +1,73 @@
+<h2>Architecture Approaches</h2>
+<p class="subtitle">Three ways to restructure the app for multi-job + pipeline view</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>重构 Layout + 新增 PipelineView（推荐）</h3>
+      <p>保留现有路由页面代码，在 Layout 层面加入 Sidebar 和 StatusBar。新增一个 PipelineView 作为主页面，内嵌所有阶段的编辑面板。路由变为 <code>/</code> 是上传页、<code>/pipeline/:jobId</code> 是流水线视图。现有 CharacterEditor 等组件的逻辑抽取为可复用面板组件。</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4>
+          <ul>
+            <li>改动可控，现有页面组件可复用</li>
+            <li>渐进式迁移，不破坏已有功能</li>
+            <li>Sidebar/StatusBar 是全局组件，所有页面共享</li>
+          </ul>
+        </div>
+        <div class="cons"><h4>Cons</h4>
+          <ul>
+            <li>需要拆分为面板组件，有一定重构量</li>
+            <li>PipelineView 是全新页面，需从零开发</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>最小改动：每页面嵌入流水线面板</h3>
+      <p>保留现有路由结构不变，在每个编辑页面的顶部加一个 PipelineProgress 组件，页面底部加 StatusBar。Sidebar 作为全局组件。不做 PipelineView 统一页面，用户仍通过路由跳转各阶段。</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4>
+          <ul>
+            <li>改动最小，风险最低</li>
+            <li>开发速度最快</li>
+          </ul>
+        </div>
+        <div class="cons"><h4>Cons</h4>
+          <ul>
+            <li>跟你的需求B（流水线内嵌编辑）矛盾</li>
+            <li>没有统一的流水线视图体验</li>
+            <li>断点重试的逻辑散落在各处</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>完全重建：单一 PipelineView + 状态机驱动</h3>
+      <p>彻底重做前端，所有功能在一个 PipelineView 页面完成。引入状态机管理（XState 或 reducer），每个阶段为可展开面板，状态通过 context 全局共享。Sidebar 和 StatusBar 是视图的固定部分。</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4>
+          <ul>
+            <li>架构最清晰，体验最统一</li>
+            <li>状态管理强，断点重试天然支持</li>
+          </ul>
+        </div>
+        <div class="cons"><h4>Cons</h4>
+          <ul>
+            <li>工程量最大，需要重写大部分前端</li>
+            <li>引入额外的状态管理库</li>
+            <li>与现有代码几乎无复用</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

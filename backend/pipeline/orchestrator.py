@@ -47,6 +47,33 @@ def get_job(job_id: int) -> dict:
     return dict(row)
 
 
+def list_jobs(search: str | None = None, status_filter: str | None = None) -> list[dict[str, Any]]:
+    db = get_db()
+    query = "SELECT * FROM jobs"
+    params: list[Any] = []
+    conditions: list[str] = []
+
+    if search:
+        conditions.append("(title LIKE ? OR author LIKE ?)")
+        params.extend([f"%{search}%", f"%{search}%"])
+    if status_filter:
+        conditions.append("status = ?")
+        params.append(status_filter)
+
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+    query += " ORDER BY updated_at DESC"
+
+    rows = db.execute(query, tuple(params)).fetchall()
+    return [dict(r) for r in rows]
+
+
+def delete_job(job_id: int) -> None:
+    db = get_db()
+    db.execute("DELETE FROM jobs WHERE id = ?", (job_id,))
+    db.commit()
+
+
 def update_job_status(job_id: int, status: str, stage: str | None = None):
     db = get_db()
     if stage:
@@ -292,6 +319,59 @@ async def advance_pipeline(job_id: int) -> dict[str, Any]:
         return get_job(job_id)
 
     raise ValueError(f"Unexpected job state: status={job['status']}, stage={current_stage}")
+
+
+def _cleanup_downstream(job_id: int, from_stage: str) -> None:
+    db = get_db()
+    stage_order = {
+        "chapter_splitting": 0, "character_extraction": 1,
+        "scene_analysis": 2, "episode_structuring": 3, "script_assembly": 4,
+    }
+    cutoff = stage_order[from_stage]
+
+    if cutoff <= 1:
+        db.execute("DELETE FROM characters WHERE job_id = ?", (job_id,))
+    if cutoff <= 2:
+        scene_ids = [r[0] for r in db.execute(
+            "SELECT id FROM scenes WHERE job_id = ?", (job_id,)
+        ).fetchall()]
+        for sid in scene_ids:
+            db.execute("DELETE FROM scene_beats WHERE scene_id = ?", (sid,))
+        db.execute("DELETE FROM scenes WHERE job_id = ?", (job_id,))
+    if cutoff <= 3:
+        ep_ids = [r[0] for r in db.execute(
+            "SELECT id FROM episodes WHERE job_id = ?", (job_id,)
+        ).fetchall()]
+        for eid in ep_ids:
+            db.execute("DELETE FROM episode_scenes WHERE episode_id = ?", (eid,))
+        db.execute("DELETE FROM episodes WHERE job_id = ?", (job_id,))
+    if cutoff <= 4:
+        db.execute("DELETE FROM adaptation_notes WHERE job_id = ?", (job_id,))
+    db.commit()
+
+
+async def retry_pipeline(job_id: int, from_stage: str, rerun_stages: list[str]) -> dict[str, Any]:
+    _cleanup_downstream(job_id, from_stage)
+
+    all_affected = [from_stage] + rerun_stages
+    stage_order = {s: i for i, s in enumerate(STAGES)}
+    ordered = sorted(all_affected, key=lambda s: stage_order.get(s, 99))
+
+    for stage in ordered:
+        update_stage_status(job_id, stage, "pending")
+
+    update_job_status(job_id, "running", from_stage)
+    update_stage_status(job_id, from_stage, "running")
+
+    runner = STAGE_RUNNERS.get(from_stage)
+    if not runner:
+        raise ValueError(f"Unknown stage: {from_stage}")
+    await runner(job_id)
+
+    update_stage_status(job_id, from_stage, "awaiting_review")
+    update_job_status(job_id, "awaiting_review", from_stage)
+
+    return get_job(job_id)
 
 
 # ---- Data access helpers ----
