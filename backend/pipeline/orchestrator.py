@@ -35,6 +35,7 @@ def create_job(novel_text: str, title: str | None = None, author: str | None = N
         (novel_text, title, author),
     )
     db.commit()
+    init_stage_statuses(cursor.lastrowid)
     return get_job(cursor.lastrowid)
 
 
@@ -57,6 +58,52 @@ def update_job_status(job_id: int, status: str, stage: str | None = None):
         db.execute(
             "UPDATE jobs SET status = ?, updated_at = datetime('now') WHERE id = ?",
             (status, job_id),
+        )
+    db.commit()
+
+
+def init_stage_statuses(job_id: int) -> None:
+    db = get_db()
+    for stage in STAGES:
+        db.execute(
+            "INSERT OR IGNORE INTO stage_status (job_id, stage) VALUES (?, ?)",
+            (job_id, stage),
+        )
+    db.commit()
+
+
+def get_stage_statuses(job_id: int) -> list[dict[str, Any]]:
+    db = get_db()
+    rows = db.execute(
+        "SELECT * FROM stage_status WHERE job_id = ? ORDER BY id",
+        (job_id,),
+    ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def update_stage_status(
+    job_id: int,
+    stage: str,
+    status: str,
+    error_message: str | None = None,
+    output_summary: str | None = None,
+) -> None:
+    db = get_db()
+    now = datetime.now(timezone.utc).isoformat()
+    if status == "running":
+        db.execute(
+            "UPDATE stage_status SET status = ?, started_at = ?, error_message = NULL WHERE job_id = ? AND stage = ?",
+            (status, now, job_id, stage),
+        )
+    elif status in ("completed", "awaiting_review", "failed"):
+        db.execute(
+            "UPDATE stage_status SET status = ?, completed_at = ?, output_summary = ?, error_message = ? WHERE job_id = ? AND stage = ?",
+            (status, now, output_summary, error_message, job_id, stage),
+        )
+    else:
+        db.execute(
+            "UPDATE stage_status SET status = ? WHERE job_id = ? AND stage = ?",
+            (status, job_id, stage),
         )
     db.commit()
 
@@ -200,8 +247,10 @@ async def advance_pipeline(job_id: int) -> dict[str, Any]:
         next_stage = NEXT_STAGE.get(current_stage)
         if next_stage == "completed":
             update_job_status(job_id, "completed", "completed")
+            update_stage_status(job_id, "completed", "completed")
             return get_job(job_id)
         update_job_status(job_id, "running", next_stage)
+        update_stage_status(job_id, next_stage, "running")
         runner = STAGE_RUNNERS.get(next_stage)
         if runner:
             try:
@@ -209,21 +258,36 @@ async def advance_pipeline(job_id: int) -> dict[str, Any]:
             except Exception as e:
                 logger.error(f"Pipeline stage {next_stage} failed: {e}")
                 update_job_status(job_id, "failed", next_stage)
+                update_stage_status(job_id, next_stage, "failed", error_message=str(e))
                 raise
+        output_summary = None
+        if next_stage == "character_extraction":
+            count = get_db().execute(
+                "SELECT COUNT(*) FROM characters WHERE job_id = ?", (job_id,)
+            ).fetchone()[0]
+            output_summary = f"{count} 个角色"
         if next_stage == "completed":
             update_job_status(job_id, "completed", "completed")
+            update_stage_status(job_id, "completed", "completed")
         else:
             update_job_status(job_id, "awaiting_review", next_stage)
+            update_stage_status(job_id, next_stage, "awaiting_review", output_summary=output_summary)
         return get_job(job_id)
 
     if job["status"] == "queued":
         update_job_status(job_id, "running", "chapter_splitting")
+        update_stage_status(job_id, "chapter_splitting", "running")
         try:
             await _run_chapter_splitting(job_id, job["novel_text"])
         except Exception as e:
             logger.error(f"Pipeline stage chapter_splitting failed: {e}")
             update_job_status(job_id, "failed", "chapter_splitting")
+            update_stage_status(job_id, "chapter_splitting", "failed", error_message=str(e))
             raise
+        chapter_count = get_db().execute(
+            "SELECT COUNT(*) FROM chapters WHERE job_id = ?", (job_id,)
+        ).fetchone()[0]
+        update_stage_status(job_id, "chapter_splitting", "awaiting_review", output_summary=f"{chapter_count} 章")
         update_job_status(job_id, "awaiting_review", "chapter_splitting")
         return get_job(job_id)
 
