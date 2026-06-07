@@ -46,6 +46,7 @@ function toYaml(obj: any, indent = 0): string {
 export function ScriptStage() {
   const { state } = useJobs();
   const [script, setScript] = useState<any>(null);
+  const [viewFormat, setViewFormat] = useState<'json' | 'yaml'>('json');
 
   useEffect(() => {
     if (state.activeJobId) {
@@ -67,6 +68,10 @@ export function ScriptStage() {
     URL.revokeObjectURL(url);
   };
 
+  const previewContent = viewFormat === 'json'
+    ? JSON.stringify(script, null, 2)
+    : toYaml(script);
+
   return (
     <div>
       {script.meta && (
@@ -76,7 +81,17 @@ export function ScriptStage() {
           <span>{script.meta.total_chapters_in_novel} 章</span>
         </div>
       )}
-      <pre className={styles.preview}>{JSON.stringify(script, null, 2)}</pre>
+      <div className={styles.tabs}>
+        <button
+          className={`${styles.tab} ${viewFormat === 'json' ? styles.tabActive : ''}`}
+          onClick={() => setViewFormat('json')}
+        >JSON</button>
+        <button
+          className={`${styles.tab} ${viewFormat === 'yaml' ? styles.tabActive : ''}`}
+          onClick={() => setViewFormat('yaml')}
+        >YAML</button>
+      </div>
+      <pre className={styles.preview}>{previewContent}</pre>
       <div className={styles.actions}>
         <button
           className={styles.downloadBtn}
