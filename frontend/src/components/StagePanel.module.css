@@ -1,0 +1,162 @@
+.panel {
+  border: 1px solid #0f3460;
+  border-radius: 6px;
+  background: #1a1a2e;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.locked {
+  opacity: 0.4;
+  border-color: #222;
+}
+
+.failed {
+  border-color: #ff6b6b;
+}
+
+.activeReview {
+  border-color: #e94560;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.header:hover {
+  background: rgba(15, 52, 96, 0.3);
+}
+
+.indicator {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.spinner {
+  border: 2px solid #333;
+  border-top-color: #e94560;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.label {
+  color: #eee;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.meta {
+  margin-left: auto;
+  font-size: 11px;
+  color: #888;
+}
+
+.chevron {
+  color: #555;
+  font-size: 10px;
+}
+
+.body {
+  padding: 15px;
+  border-top: 1px solid #0f3460;
+}
+
+.error {
+  padding: 8px 12px;
+  background: rgba(255, 107, 107, 0.1);
+  border-left: 3px solid #ff6b6b;
+  color: #ff6b6b;
+  font-size: 11px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.errorText {
+  flex: 1;
+}
+
+.retryBtn {
+  padding: 3px 10px;
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.actions {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #0f3460;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.checkboxes {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.checkbox {
+  color: #888;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.checkbox input {
+  margin-right: 3px;
+}
+
+.continueBtn {
+  padding: 6px 18px;
+  background: #e94560;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.continueBtn:hover {
+  background: #d63850;
+}
+
+.retryFromBtn {
+  padding: 6px 18px;
+  background: #e94560;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-left: auto;
+}
+
+.retryFromBtn:hover {
+  background: #d63850;
+}
