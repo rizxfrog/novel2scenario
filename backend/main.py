@@ -9,6 +9,7 @@ from backend.routes.jobs import router as jobs_router
 from backend.routes.characters import router as characters_router
 from backend.routes.scenes import router as scenes_router
 from backend.routes.episodes import router as episodes_router
+from backend.routes.ai_assist import router as ai_assist_router
 from backend.pipeline.orchestrator import get_script
 
 logging.basicConfig(level=logging.INFO)
@@ -40,6 +41,7 @@ app.include_router(jobs_router)
 app.include_router(characters_router)
 app.include_router(scenes_router)
 app.include_router(episodes_router)
+app.include_router(ai_assist_router)
 
 
 @app.get("/api/jobs/{job_id}/script")

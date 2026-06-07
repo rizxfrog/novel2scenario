@@ -1,5 +1,6 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { useJobs } from '../context/JobContext';
+import { api } from '../api';
 import { StagePanel } from './StagePanel';
 import { StatusBar } from './StatusBar';
 import { Sidebar } from './Sidebar';
@@ -19,7 +20,7 @@ const STAGE_LABELS: Record<string, string> = {
   script_assembly: '剧本生成',
 };
 
-const STAGE_COMPONENTS: Record<string, React.ComponentType> = {
+const STAGE_COMPONENTS: Record<string, React.ComponentType<any>> = {
   chapter_splitting: ChapterStage,
   character_extraction: CharacterStage,
   scene_analysis: SceneStage,
@@ -27,21 +28,41 @@ const STAGE_COMPONENTS: Record<string, React.ComponentType> = {
   script_assembly: ScriptStage,
 };
 
+const SAVE_APIS: Record<string, (jobId: number, data: any) => Promise<any>> = {
+  character_extraction: (jobId, data) => api.saveCharacters(jobId, data),
+  scene_analysis: (jobId, data) => api.saveScenes(jobId, data),
+  episode_structuring: (jobId, data) => api.saveEpisodes(jobId, data),
+};
+
 export function PipelineView() {
   const { state, continuePipeline, retryFromStage, loadJobs } = useJobs();
   const job = state.jobs.find(j => j.id === state.activeJobId);
+  const stageDataRef = useRef<Record<string, any>>({});
 
-  // Load jobs on mount
   useEffect(() => {
     loadJobs();
   }, []);
 
-  const handleContinue = useCallback((stage: string, rerunStages: string[]) => {
-    if (state.activeJobId) {
+  const handleSaveAndContinue = useCallback(async (stageName: string, rerunStages: string[]) => {
+    if (!state.activeJobId) return;
+
+    try {
+      // Call the appropriate save API
+      const saveApi = SAVE_APIS[stageName];
+      const currentData = stageDataRef.current[stageName];
+      if (saveApi && currentData) {
+        await saveApi(state.activeJobId, currentData);
+      }
+    } catch {
+      // Continue even if save fails
+    }
+
+    if (rerunStages.length > 0) {
+      retryFromStage(state.activeJobId, stageName, rerunStages);
+    } else {
       continuePipeline(state.activeJobId);
     }
-    // Note: continuePipeline currently ignores rerunStages — API adjustment needed later
-  }, [state.activeJobId, continuePipeline]);
+  }, [state.activeJobId, continuePipeline, retryFromStage]);
 
   const handleRetry = useCallback((stage: string) => {
     if (state.activeJobId) {
@@ -53,11 +74,14 @@ export function PipelineView() {
 
   const renderStageContent = useCallback((stageName: string) => {
     const Component = STAGE_COMPONENTS[stageName];
-    if (Component) return <Component />;
-    return null;
+    if (!Component) return null;
+    return (
+      <Component
+        setData={(data: any) => { stageDataRef.current[stageName] = data; }}
+      />
+    );
   }, []);
 
-  // Empty state: no job selected — show upload form for new job creation
   if (!job) {
     return (
       <div className={styles.layout}>
@@ -84,7 +108,6 @@ export function PipelineView() {
             {job.title || `Job #${job.id}`}
           </div>
 
-          {/* Pipeline stages */}
           {state.stages.map((s, i) => (
             <StagePanel
               key={s.stage}
@@ -93,7 +116,7 @@ export function PipelineView() {
               index={i + 1}
               canRetryFrom={s.status === 'completed'}
               onRetry={() => handleRetry(s.stage)}
-              onContinue={(rerun) => handleContinue(s.stage, rerun)}
+              onSaveAndContinue={(rerun) => handleSaveAndContinue(s.stage, rerun)}
             >
               {s.status !== 'pending' && renderStageContent(s.stage)}
             </StagePanel>

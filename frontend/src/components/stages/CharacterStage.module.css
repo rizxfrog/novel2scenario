@@ -14,7 +14,23 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  position: relative;
 }
+
+.deleteBtn {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: none;
+  border: 1px solid transparent;
+  color: #888;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  border-radius: 2px;
+}
+.deleteBtn:hover { color: #e94560; border-color: #e94560; }
 
 .name {
   background: transparent;
@@ -23,6 +39,7 @@
   font-size: 14px;
   font-weight: 500;
   padding: 0;
+  padding-right: 20px;
 }
 .name:focus { outline: 1px solid #e94560; border-radius: 2px; }
 
@@ -55,6 +72,13 @@
   resize: vertical;
 }
 
+.toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
 .saveBtn {
   padding: 6px 16px;
   background: #e94560;
@@ -65,3 +89,66 @@
   font-size: 12px;
 }
 .saveBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.addBtn {
+  padding: 6px 14px;
+  background: transparent;
+  color: #4ecca3;
+  border: 1px dashed #4ecca3;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+}
+.addBtn:hover { background: rgba(78, 204, 163, 0.1); }
+
+/* AI Panel */
+.aiPanel { margin-top: 12px; }
+
+.aiToggleBtn {
+  padding: 5px 12px;
+  background: transparent;
+  color: #8888cc;
+  border: 1px solid #333;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+}
+.aiToggleBtn:hover { border-color: #8888cc; color: #aaaacc; }
+
+.aiBody {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.aiInput {
+  background: #1a1a2e;
+  border: 1px solid #16213e;
+  color: #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 12px;
+  font-family: inherit;
+  resize: vertical;
+}
+.aiInput:focus { border-color: #8888cc; outline: none; }
+
+.aiError {
+  color: #e94560;
+  font-size: 11px;
+  margin: 0;
+}
+
+.aiBtn {
+  padding: 6px 16px;
+  background: #6666aa;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  align-self: flex-start;
+}
+.aiBtn:hover { background: #7777bb; }
+.aiBtn:disabled { opacity: 0.5; cursor: not-allowed; }

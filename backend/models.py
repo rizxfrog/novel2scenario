@@ -119,6 +119,16 @@ class RetryRequest(BaseModel):
     rerun_stages: list[str] = []
 
 
+class AIAssistRequest(BaseModel):
+    stage: str
+    instruction: str
+    current_data: dict
+
+
+class AIAssistResponse(BaseModel):
+    data: dict
+
+
 # --- Script Output ---
 class ScriptMeta(BaseModel):
     title: str
