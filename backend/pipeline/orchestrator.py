@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, cast
 
 from backend.database import get_db
 from backend.pipeline.splitter import split_chapters
@@ -118,12 +118,12 @@ async def _run_scene_analysis(job_id: int) -> None:
 
 async def _run_episode_structuring(job_id: int) -> None:
     db = get_db()
-    characters = [dict(r) for r in db.execute(
+    characters = cast(list[dict[str, Any]], [dict(r) for r in db.execute(
         "SELECT * FROM characters WHERE job_id = ?", (job_id,)
-    ).fetchall()]
-    scenes = [dict(r) for r in db.execute(
+    ).fetchall()])
+    scenes = cast(list[dict[str, Any]], [dict(r) for r in db.execute(
         "SELECT * FROM scenes WHERE job_id = ? ORDER BY id", (job_id,)
-    ).fetchall()]
+    ).fetchall()])
 
     episodes = await structure_episodes(characters, scenes)
 

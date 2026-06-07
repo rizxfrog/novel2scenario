@@ -14,3 +14,11 @@ node_modules/
 /novel2scenario.db
 /novel2scenario.db-shm
 /novel2scenario.db-wal
+/docs/design/
+/.understand-anything/intermediate/scan-result.json
+/.understand-anything/.understandignore
+/.understand-anything/config.json
+/.understand-anything/fingerprints.json
+/.understand-anything/knowledge-graph.json
+/.understand-anything/meta.json
+/.cursor/rules/codegraph.mdc
