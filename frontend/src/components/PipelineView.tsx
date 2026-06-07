@@ -71,7 +71,6 @@ export function PipelineView() {
             <UploadStage />
           </div>
         </main>
-        <StatusBar />
       </div>
     );
   }
@@ -79,27 +78,29 @@ export function PipelineView() {
   return (
     <div className={styles.layout}>
       <Sidebar />
-      <main className={styles.main}>
-        <div className={styles.title}>
-          {job.title || `Job #${job.id}`}
-        </div>
+      <div className={styles.rightColumn}>
+        <main className={styles.main}>
+          <div className={styles.title}>
+            {job.title || `Job #${job.id}`}
+          </div>
 
-        {/* Pipeline stages */}
-        {state.stages.map((s, i) => (
-          <StagePanel
-            key={s.stage}
-            stage={s}
-            label={STAGE_LABELS[s.stage] || s.stage}
-            index={i + 1}
-            canRetryFrom={s.status === 'completed'}
-            onRetry={() => handleRetry(s.stage)}
-            onContinue={(rerun) => handleContinue(s.stage, rerun)}
-          >
-            {s.status !== 'pending' && renderStageContent(s.stage)}
-          </StagePanel>
-        ))}
-      </main>
-      <StatusBar />
+          {/* Pipeline stages */}
+          {state.stages.map((s, i) => (
+            <StagePanel
+              key={s.stage}
+              stage={s}
+              label={STAGE_LABELS[s.stage] || s.stage}
+              index={i + 1}
+              canRetryFrom={s.status === 'completed'}
+              onRetry={() => handleRetry(s.stage)}
+              onContinue={(rerun) => handleContinue(s.stage, rerun)}
+            >
+              {s.status !== 'pending' && renderStageContent(s.stage)}
+            </StagePanel>
+          ))}
+        </main>
+        <StatusBar />
+      </div>
     </div>
   );
 }

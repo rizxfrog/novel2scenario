@@ -1,9 +1,6 @@
 .bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
   height: 36px;
+  min-height: 36px;
   background: #0f3460;
   border-top: 1px solid #16213e;
   display: flex;
@@ -12,7 +9,7 @@
   padding: 0 20px;
   font-size: 12px;
   color: #ccc;
-  z-index: 100;
+  flex-shrink: 0;
 }
 
 .failed {
