@@ -19,7 +19,7 @@ const STATUS_CLASS: Record<string, string> = {
 };
 
 export function Sidebar() {
-  const { state, loadJobs, removeJob, selectJob } = useJobs();
+  const { state, loadJobs, removeJob, selectJob, dispatch } = useJobs();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
 
@@ -86,6 +86,12 @@ export function Sidebar() {
           <div className={styles.empty}>暂无任务</div>
         )}
       </div>
+      <button
+        className={styles.newBtn}
+        onClick={() => dispatch({ type: 'SET_ACTIVE_JOB', jobId: null })}
+      >
+        + 新建 Job
+      </button>
     </aside>
   );
 }

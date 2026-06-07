@@ -50,10 +50,10 @@
 .emptySubtitle {
   color: #ccc;
   font-size: 14px;
-  margin: 0 0 20px 0;
+  margin: 0;
 }
 
-.emptyHint {
-  color: #666;
-  font-size: 13px;
+.emptyHeader {
+  text-align: center;
+  margin-bottom: 20px;
 }

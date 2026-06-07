@@ -106,3 +106,19 @@
   text-align: center;
   padding: 20px 0;
 }
+
+.newBtn {
+  width: 100%;
+  padding: 8px;
+  background: #e94560;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+.newBtn:hover {
+  background: #d63850;
+}

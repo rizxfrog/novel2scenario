@@ -57,15 +57,19 @@ export function PipelineView() {
     return null;
   }, []);
 
-  // Empty state: no job selected
+  // Empty state: no job selected — show upload form for new job creation
   if (!job) {
     return (
       <div className={styles.layout}>
         <Sidebar />
-        <main className={styles.emptyState}>
-          <h2 className={styles.emptyTitle}>Novel2Scenario</h2>
-          <p className={styles.emptySubtitle}>AI 小说转剧本工具</p>
-          <p className={styles.emptyHint}>选择一个 Job 或新建一个开始</p>
+        <main className={styles.main}>
+          <div className={styles.emptyHeader}>
+            <h2 className={styles.emptyTitle}>Novel2Scenario</h2>
+            <p className={styles.emptySubtitle}>AI 小说转剧本工具</p>
+          </div>
+          <div className={styles.uploadSection}>
+            <UploadStage />
+          </div>
         </main>
         <StatusBar />
       </div>
@@ -78,11 +82,6 @@ export function PipelineView() {
       <main className={styles.main}>
         <div className={styles.title}>
           {job.title || `Job #${job.id}`}
-        </div>
-
-        {/* Upload stage (always first) */}
-        <div className={styles.uploadSection}>
-          <UploadStage />
         </div>
 
         {/* Pipeline stages */}
