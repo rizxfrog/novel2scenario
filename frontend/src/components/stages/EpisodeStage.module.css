@@ -1,0 +1,49 @@
+.empty { color: #666; font-size: 12px; text-align: center; padding: 20px; }
+
+.episode {
+  border: 1px solid #0f3460;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.header {
+  padding: 8px 12px; background: #0f3460;
+}
+
+.number { color: #e94560; font-size: 13px; font-weight: 500; }
+
+.body {
+  padding: 12px; display: flex; flex-direction: column; gap: 8px;
+}
+
+.title {
+  background: transparent;
+  border: 1px solid #16213e;
+  color: #eee;
+  border-radius: 3px;
+  padding: 6px 8px;
+  font-size: 13px;
+}
+
+.summary {
+  background: #1a1a2e;
+  border: 1px solid #16213e;
+  color: #ccc;
+  border-radius: 3px;
+  padding: 8px;
+  font-size: 12px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.meta {
+  display: flex; gap: 15px; color: #888; font-size: 11px;
+}
+
+.saveBtn {
+  padding: 6px 16px; background: #e94560; color: white;
+  border: none; border-radius: 4px; cursor: pointer; font-size: 12px;
+  margin-top: 10px;
+}
+.saveBtn:disabled { opacity: 0.5; cursor: not-allowed; }

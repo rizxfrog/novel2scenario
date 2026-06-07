@@ -1,0 +1,24 @@
+.container { display: flex; flex-direction: column; gap: 6px; }
+.empty { color: #666; font-size: 12px; text-align: center; padding: 20px; }
+
+.chapter {
+  border: 1px solid #0f3460;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px; cursor: pointer; background: #0f3460;
+}
+.header:hover { background: #16213e; }
+
+.number { color: #e94560; font-size: 12px; font-weight: 500; }
+.title { color: #eee; font-size: 12px; flex: 1; }
+.wordCount { color: #666; font-size: 11px; }
+
+.content {
+  padding: 12px; color: #ccc; font-size: 12px;
+  line-height: 1.8; max-height: 300px; overflow-y: auto;
+  white-space: pre-wrap;
+}
