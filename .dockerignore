@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Node
+node_modules/
+
+# Database
+*.db
+
+# IDE
+.idea/
+.vscode/
+.cursor/
+
+# Git
+.git/
+
+# Environment
+.env  # loaded at runtime via env_file
+
+# Tests / docs (not needed at runtime)
+tests/
+docs/
+.superpowers/
+.understand-anything/
+
+# Misc
+*.md
+!.env.example
