@@ -23,6 +23,39 @@
 }
 .textarea::placeholder { color: #666; }
 
+.uploadRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fileInput {
+  display: none;
+}
+
+.fileLabel {
+  padding: 6px 14px;
+  background: #0f3460;
+  border: 1px dashed #4ecca3;
+  color: #4ecca3;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+.fileLabel:hover {
+  background: #16213e;
+}
+
+.fileName {
+  color: #888;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
 .submit {
   padding: 10px;
   background: #e94560;
