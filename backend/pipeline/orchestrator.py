@@ -376,6 +376,15 @@ async def retry_pipeline(job_id: int, from_stage: str, rerun_stages: list[str]) 
 
 # ---- Data access helpers ----
 
+def get_chapters(job_id: int) -> list[dict]:
+    db = get_db()
+    chapters = [dict(r) for r in db.execute(
+        "SELECT id, job_id, number, title, content FROM chapters WHERE job_id = ? ORDER BY number",
+        (job_id,),
+    ).fetchall()]
+    return chapters
+
+
 def get_characters(job_id: int) -> list[dict]:
     db = get_db()
     chars = [dict(r) for r in db.execute(

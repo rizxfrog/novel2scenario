@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from backend.models import JobCreate, JobResponse, RetryRequest
-from backend.pipeline.orchestrator import create_job, get_job, advance_pipeline, list_jobs, delete_job, retry_pipeline, get_stage_statuses
+from backend.pipeline.orchestrator import create_job, get_job, advance_pipeline, list_jobs, delete_job, retry_pipeline, get_stage_statuses, get_chapters
 
 router = APIRouter(prefix="/api/jobs", tags=["jobs"])
 
@@ -57,6 +57,15 @@ async def get_stages(job_id: int):
     except ValueError:
         raise HTTPException(status_code=404, detail="Job not found")
     return get_stage_statuses(job_id)
+
+
+@router.get("/{job_id}/chapters")
+async def get_chapters_endpoint(job_id: int):
+    try:
+        get_job(job_id)
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Job not found")
+    return get_chapters(job_id)
 
 
 @router.post("/{job_id}/retry", response_model=JobResponse)
