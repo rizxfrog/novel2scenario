@@ -65,11 +65,36 @@ export interface Episode {
   scene_ids: number[];
 }
 
+export interface StageStatus {
+  id: number;
+  job_id: number;
+  stage: string;
+  status: 'pending' | 'running' | 'awaiting_review' | 'completed' | 'failed';
+  error_message?: string;
+  output_summary?: string;
+  started_at?: string;
+  completed_at?: string;
+}
+
+export interface RetryRequest {
+  from_stage: string;
+  rerun_stages: string[];
+}
+
+export interface JobState {
+  jobs: Job[];
+  activeJobId: number | null;
+  stages: StageStatus[];
+  stageData: Record<string, any>;
+  loading: boolean;
+  error: string | null;
+}
+
 export const api = {
-  createJob: (novel_text: string, title?: string) =>
+  createJob: (novel_text: string, title?: string, author?: string) =>
     request<Job>('/jobs', {
       method: 'POST',
-      body: JSON.stringify({ novel_text, title }),
+      body: JSON.stringify({ novel_text, title, author }),
     }),
 
   getJob: (id: number) => request<Job>(`/jobs/${id}`),
@@ -105,4 +130,23 @@ export const api = {
     }),
 
   getScript: (jobId: number) => request<any>(`/jobs/${jobId}/script`),
+
+  listJobs: (search?: string, status?: string) => {
+    const params = new URLSearchParams();
+    if (search) params.set('q', search);
+    if (status) params.set('status', status);
+    return request<Job[]>(`/jobs?${params}`);
+  },
+
+  deleteJob: (id: number) =>
+    fetch(`${BASE}/jobs/${id}`, { method: 'DELETE' }),
+
+  getStages: (jobId: number) =>
+    request<StageStatus[]>(`/jobs/${jobId}/stages`),
+
+  retryJob: (jobId: number, fromStage: string, rerunStages: string[]) =>
+    request<Job>('/jobs/' + jobId + '/retry', {
+      method: 'POST',
+      body: JSON.stringify({ from_stage: fromStage, rerun_stages: rerunStages }),
+    }),
 };
