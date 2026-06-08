@@ -4,7 +4,7 @@ AI 小说转剧本工具 — 将小说文本自动转换为结构化剧本（JSO
 
 ## Demo
 
-<video src="assets/bandicam.mp4" controls width="100%"></video>
+![bandicam.mp4](assets/bandicam.mp4)
 
 ## 产品介绍
 
